@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CRICKET RUSH — International Cricket Challenge</title>
+  <meta name="description" content="An arcade-style international cricket game combining realistic tournament progression with fast batting and racing mechanics.">
+  <meta name="author" content="Jawad Akhter">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏏</text></svg>">
+</head>
+<body>
+
+  <!-- Background Animated Stadium Atmosphere -->
+  <div class="stadium-bg-overlay"></div>
+  <div class="floodlight-beam beam-left"></div>
+  <div class="floodlight-beam beam-right"></div>
+
+  <!-- Global App Header Bar -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-mark">🏏</div>
+      <div class="header-titles">
+        <h1 class="game-logo-text">CRICKET RUSH</h1>
+        <span class="game-tagline">International Cricket Challenge</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div id="career-level-pill" class="career-pill" data-screen="screen-career-stats" title="View Career Stats">
+        <span class="level-badge">LVL 1</span>
+        <span class="level-title">Gully Cricketer</span>
+        <span class="level-xp">0 XP</span>
+      </div>
+      <button id="global-sound-toggle" class="sound-badge sound-on" aria-label="Toggle Sound">🔊 Sound ON</button>
+    </div>
+  </header>
+
+  <!-- Main Game Container -->
+  <main class="game-viewport">
+
+    <!-- ========================================== -->
+    <!-- 1. MAIN MENU SCREEN                        -->
+    <!-- ========================================== -->
+    <section id="screen-main-menu" class="game-screen active">
+      <div class="hero-center-box">
+        <div class="hero-trophy-glow">
+          <svg viewBox="0 0 100 130" class="hero-trophy-svg">
+            <defs>
+              <linearGradient id="heroGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff8cc" />
+                <stop offset="50%" stop-color="#ffd700" />
+                <stop offset="100%" stop-color="#b8860b" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="35" r="22" fill="url(#heroGold)" />
+            <path d="M35,120 L65,120 L58,75 L42,75 Z" fill="url(#heroGold)" />
+            <rect x="25" y="120" width="50" height="8" rx="2" fill="#222" />
+            <ellipse cx="50" cy="35" rx="22" ry="7" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+          </svg>
+        </div>
+        <h1 class="main-title-cinematic">CRICKET RUSH</h1>
+        <p class="main-subtitle-cinematic">International Cricket Challenge</p>
+        <div class="game-mode-chips">
+          <span class="mode-chip">🏏 Bat & Time</span>
+          <span class="mode-chip">🏃 Race Between Wickets</span>
+          <span class="mode-chip">🏆 Win Tournaments</span>
+        </div>
+
+        <div class="main-menu-buttons">
+          <button id="btn-menu-play" class="menu-btn primary-pulse">
+            <span class="btn-icon">⚡</span>
+            <div class="btn-text-group">
+              <span class="btn-main-text">PLAY TOURNAMENT</span>
+              <span class="btn-subtext">Choose Team & Format</span>
+            </div>
+          </button>
+
+          <button id="btn-continue-career" class="menu-btn continue-btn disabled-btn" disabled>
+            <span class="btn-icon">▶</span>
+            <div class="btn-text-group">
+              <span class="btn-main-text">CONTINUE CAREER</span>
+              <span class="btn-subtext">Resume Active Tournament</span>
+            </div>
+          </button>
+
+          <div class="menu-btn-row">
+            <button id="btn-menu-tournaments" class="menu-btn secondary-btn" data-screen="screen-tournament-select">
+              <span class="btn-icon">🌍</span>
+              <span class="btn-main-text">Tournaments</span>
+            </button>
+            <button id="btn-menu-trophies" class="menu-btn secondary-btn" data-screen="screen-trophy-cabinet">
+              <span class="btn-icon">🏆</span>
+              <span class="btn-main-text">Trophy Cabinet</span>
+            </button>
+          </div>
+
+          <div class="menu-btn-row">
+            <button id="btn-menu-career" class="menu-btn secondary-btn" data-screen="screen-career-stats">
+              <span class="btn-icon">📊</span>
+              <span class="btn-main-text">Career Stats</span>
+            </button>
+            <button id="btn-menu-how-to-play" class="menu-btn secondary-btn" data-screen="screen-how-to-play">
+              <span class="btn-icon">📖</span>
+              <span class="btn-main-text">How To Play</span>
+            </button>
+            <button id="btn-menu-settings" class="menu-btn secondary-btn" data-screen="screen-settings">
+              <span class="btn-icon">⚙️</span>
+              <span class="btn-main-text">Settings</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Portfolio Author Credit -->
+        <div class="menu-author-badge">
+          <span>Built with passion by <strong>Jawad Akhter</strong> | Software Quality Assurance Engineer</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2. TEAM SELECTION SCREEN                   -->
+    <!-- ========================================== -->
+    <section id="screen-team-select" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-main-menu">❮ Back</button>
+        <div class="header-text">
+          <h2>SELECT YOUR TEAM</h2>
+          <p>Choose an international nation to represent in world cricket</p>
+        </div>
+      </div>
+
+      <div id="teams-grid-container" class="teams-grid">
+        <!-- Injected dynamically by teams.js -->
+      </div>
+
+      <div id="selected-team-banner" class="selected-team-bar">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. TOURNAMENT SELECTION SCREEN             -->
+    <!-- ========================================== -->
+    <section id="screen-tournament-select" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-team-select">❮ Back</button>
+        <div class="header-text">
+          <h2>SELECT TOURNAMENT</h2>
+          <p>Compete in world cups, continental cups, or test championships</p>
+        </div>
+      </div>
+
+      <div id="tournaments-grid-container" class="tournaments-grid">
+        <!-- Injected dynamically by tournaments.js -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4. TOURNAMENT DASHBOARD SCREEN             -->
+    <!-- ========================================== -->
+    <section id="screen-tournament-dashboard" class="game-screen">
+      <div class="dashboard-top-nav">
+        <button class="btn-back" data-screen="screen-main-menu">❮ Main Menu</button>
+        <div class="dash-quick-links">
+          <button class="dash-tab-btn" data-screen="screen-points-table">📊 Points Table</button>
+          <button class="dash-tab-btn" data-screen="screen-knockout-bracket">🌳 Knockout Bracket</button>
+          <button class="dash-tab-btn" data-screen="screen-trophy-cabinet">🏆 Trophies</button>
+        </div>
+      </div>
+
+      <div id="dashboard-header-card" class="dashboard-header-card">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div id="dashboard-stats-row" class="dashboard-stats-row">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div class="dashboard-main-grid">
+        <div id="dashboard-next-match-card" class="next-match-spotlight">
+          <!-- Injected dynamically -->
+        </div>
+
+        <div class="dashboard-schedule-panel">
+          <div class="panel-header">
+            <h3>📅 TOURNAMENT SCHEDULE</h3>
+            <button class="btn-mini-link" data-screen="screen-points-table">Full Standings →</button>
+          </div>
+          <div id="dashboard-schedule-mini" class="mini-schedule-list">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 5. MATCH PREVIEW SCREEN                    -->
+    <!-- ========================================== -->
+    <section id="screen-match-preview" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-tournament-dashboard">❮ Dashboard</button>
+      </div>
+      <div id="match-preview-container" class="match-preview-wrapper">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 6. CRICKET GAMEPLAY ARENA SCREEN           -->
+    <!-- ========================================== -->
+    <section id="screen-gameplay" class="game-screen gameplay-screen">
+      <!-- Live Scoreboard Broadcast HUD -->
+      <div class="gameplay-broadcast-hud">
+        <div class="hud-score-card">
+          <div class="hud-score-main">
+            <span id="hud-score-display" class="hud-score-text">PAK 0/0</span>
+            <span id="hud-overs-display" class="hud-overs-text">Overs: 0.0 / 2</span>
+          </div>
+          <div class="hud-target-row">
+            <span id="hud-target-display" class="hud-target-text">Target: 32 (32 needed)</span>
+          </div>
+        </div>
+
+        <div class="hud-batter-card">
+          <span id="hud-batter-display" class="hud-batter-text">B. Azam: 0 (0) [4s: 0, 6s: 0]</span>
+        </div>
+
+        <div class="hud-timeline-card">
+          <span class="timeline-label">THIS OVER:</span>
+          <div id="hud-timeline-container" class="hud-timeline-pills">
+            <span class="timeline-ball">•</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas Cricket Arena -->
+      <div class="canvas-viewport-container">
+        <canvas id="cricket-game-canvas"></canvas>
+      </div>
+
+      <!-- Mobile & Desktop On-Screen Action Controls -->
+      <div class="gameplay-controls-overlay">
+        <!-- Directional Pad -->
+        <div class="shot-direction-pad">
+          <button class="shot-dir-btn" data-shot-dir="LOFT" title="Lofted Six Shot (Up Arrow / W)">🚀 LOFT</button>
+          <div class="shot-dir-row">
+            <button class="shot-dir-btn" data-shot-dir="OFF" title="Cover Drive Off Side (Left Arrow / A)">◀ OFF</button>
+            <button class="shot-dir-btn" data-shot-dir="STRAIGHT" title="Straight Drive">▲ STR</button>
+            <button class="shot-dir-btn" data-shot-dir="LEG" title="Pull Leg Side (Right Arrow / D)">LEG ▶</button>
+          </div>
+          <button class="shot-dir-btn" data-shot-dir="DEFENSIVE" title="Defensive Block / Nudge (Down Arrow / S)">🛡️ BLOCK</button>
+        </div>
+
+        <!-- Big Primary Action Buttons -->
+        <div class="primary-action-buttons-group">
+          <button id="hud-btn-hit" class="hud-action-btn btn-hit-mega pulse-glow">
+            <span class="btn-action-icon">🏏</span>
+            <span class="btn-action-text">HIT SHOT</span>
+            <small class="btn-shortcut">[SPACEBAR]</small>
+          </button>
+
+          <button id="hud-btn-run" class="hud-action-btn btn-run-mega">
+            <span class="btn-action-icon">🏃</span>
+            <span class="btn-action-text">RUN FAST!</span>
+            <small class="btn-shortcut">[MASH SPACE]</small>
+          </button>
+
+          <button id="hud-btn-dive" class="hud-action-btn btn-dive-mini">
+            <span class="btn-action-icon">💨</span>
+            <span class="btn-action-text">DIVE</span>
+            <small class="btn-shortcut">[DOWN / S]</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 7. MATCH RESULT SCREEN                     -->
+    <!-- ========================================== -->
+    <section id="screen-match-result" class="game-screen">
+      <div id="match-result-container" class="match-result-wrapper">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 8. POINTS TABLE SCREEN                     -->
+    <!-- ========================================== -->
+    <section id="screen-points-table" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-tournament-dashboard">❮ Dashboard</button>
+        <div class="header-text">
+          <h2>TOURNAMENT STANDINGS</h2>
+          <p>Official points table, wins, losses, and Net Run Rate (NRR)</p>
+        </div>
+      </div>
+      <div id="points-table-container" class="points-table-wrapper">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 9. KNOCKOUT BRACKET SCREEN                 -->
+    <!-- ========================================== -->
+    <section id="screen-knockout-bracket" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-tournament-dashboard">❮ Dashboard</button>
+        <div class="header-text">
+          <h2>KNOCKOUT BRACKET</h2>
+          <p>Road to the Grand Championship Final</p>
+        </div>
+      </div>
+      <div id="knockout-bracket-container" class="bracket-wrapper">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 10. TROPHY CELEBRATION SCREEN              -->
+    <!-- ========================================== -->
+    <section id="screen-trophy-celebration" class="game-screen celebration-screen">
+      <div id="trophy-celebration-container" class="celebration-wrapper">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 11. TROPHY CABINET SCREEN                  -->
+    <!-- ========================================== -->
+    <section id="screen-trophy-cabinet" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-main-menu">❮ Main Menu</button>
+        <div class="header-text">
+          <h2>MY TROPHY CABINET</h2>
+          <p>Showcase of international tournament victories and silverware</p>
+        </div>
+      </div>
+      <div id="trophy-cabinet-container" class="trophy-cabinet-grid">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 12. CAREER STATISTICS SCREEN               -->
+    <!-- ========================================== -->
+    <section id="screen-career-stats" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-main-menu">❮ Main Menu</button>
+        <div class="header-text">
+          <h2>CAREER PROFILE & STATS</h2>
+          <p>Player XP progression, career milestones, and batting analytics</p>
+        </div>
+      </div>
+      <div id="career-stats-container" class="career-stats-wrapper">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 13. SETTINGS SCREEN                        -->
+    <!-- ========================================== -->
+    <section id="screen-settings" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-main-menu">❮ Main Menu</button>
+        <div class="header-text">
+          <h2>GAME SETTINGS</h2>
+          <p>Customize audio, gameplay preferences, and career data</p>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Sound Effects</h4>
+            <p>Procedural Web Audio for bat cracks, crowd cheers, and umpire calls.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-sound" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Reduced Motion / Screen Shake</h4>
+            <p>Disable camera shake during explosive sixes and boundary hits.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-reduced-motion">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Auto Sprint Assist</h4>
+            <p>Automatically sprints between wickets with a modest speed boost.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-auto-sprint">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item danger-zone">
+          <div class="setting-info">
+            <h4>Reset Career Progress</h4>
+            <p>Delete saved trophies, XP levels, and match history from localStorage.</p>
+          </div>
+          <button id="btn-reset-career" class="danger-btn">🗑️ RESET CAREER</button>
+        </div>
+
+        <div id="settings-author-info" class="author-credits-section">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 14. HOW TO PLAY SCREEN                     -->
+    <!-- ========================================== -->
+    <section id="screen-how-to-play" class="game-screen">
+      <div class="screen-header">
+        <button class="btn-back" data-screen="screen-main-menu">❮ Main Menu</button>
+        <div class="header-text">
+          <h2>HOW TO PLAY</h2>
+          <p>Master batting timing, shot angles, racing mechanics, and tournaments</p>
+        </div>
+      </div>
+
+      <div class="how-to-play-grid">
+        <div class="guide-card">
+          <div class="guide-icon">🏏</div>
+          <h3>1. BATTING & TIMING</h3>
+          <p>Watch the ball travel towards the batsman. Time your shot as the ball hits the popping crease.</p>
+          <div class="timing-legend">
+            <span class="legend-chip perfect">PERFECT: 6 or 4 Runs 🔥</span>
+            <span class="legend-chip great">GREAT: 3 to 4 Runs ⚡</span>
+            <span class="legend-chip good">GOOD: 1 to 2 Runs 👍</span>
+            <span class="legend-chip poor">POOR: Catch Risk / 0-1 ⚠️</span>
+            <span class="legend-chip miss">MISS: Bowled or Dot 💨</span>
+          </div>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-icon">🏃</div>
+          <h3>2. THE RACING MECHANIC</h3>
+          <p>When the ball is fielded into the outfield, you must race between the wickets before the fielder throws down the stumps!</p>
+          <ul class="guide-list">
+            <li><strong>MASH SPACEBAR / TAP [RUN]</strong> to accelerate your batsman sprint.</li>
+            <li><strong>PRESS [DIVE] (Down Arrow)</strong> near the crease for a desperate slide!</li>
+            <li>If the fielder fumbles, turn for a risky <strong>2nd RUN</strong>!</li>
+          </ul>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-icon">🧭</div>
+          <h3>3. SHOT SELECTION</h3>
+          <p>Steer your shots into open gaps using Arrow Keys or on-screen directional buttons:</p>
+          <ul class="guide-list">
+            <li><strong>UP ARROW / LOFT:</strong> High aerial shot for a maximum SIX!</li>
+            <li><strong>LEFT ARROW / OFF:</strong> Cover Drive through off-side field.</li>
+            <li><strong>RIGHT ARROW / LEG:</strong> Pull & Hook shot through mid-wicket.</li>
+            <li><strong>DOWN ARROW / BLOCK:</strong> Defensive block to preserve your wicket.</li>
+          </ul>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-icon">🏆</div>
+          <h3>4. TOURNAMENT CAREER</h3>
+          <p>Progress through Group Stages, qualify for Semi-Finals, and win the Grand Final to lift prestigious trophies stored in your permanent <strong>Trophy Cabinet</strong>!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer Branding -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span><strong>CRICKET RUSH</strong> — International Cricket Challenge</span>
+      <span class="footer-divider">•</span>
+      <span>Built by <strong>Jawad Akhter</strong> (Software Quality Assurance Engineer)</span>
+      <span class="footer-divider">•</span>
+      <div class="footer-links">
+        <a href="https://github.com/jd577/cricket-rush" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/jd577" target="_blank" rel="noopener">Portfolio</a>
+        <a href="https://www.linkedin.com/in/jawad-akhter" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/teams.js"></script>
+  <script src="js/tournaments.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/gameplay.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
