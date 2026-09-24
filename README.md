@@ -29,7 +29,12 @@ SEMI FINAL ➔ THE GRAND FINAL ➔ CHAMPIONS! ➔ LIFT TROPHY ➔ SAVE TO CAREER
 
 ## 🌟 Key Features
 
-- 🏏 **Arcade Batting Mechanics**: 60 FPS HTML5 Canvas rendering with real-time 3D ball trajectory, swing, seam bounce, and multi-zone timing meters (*Perfect, Great, Good, Poor, Miss*).
+- 📺 **TV Broadcast 3D Camera (v2.0)**: A true behind-the-batsman perspective view — the pitch stretches away into a floodlit stadium with three tiers of animated crowd, a sightscreen, advertising boards, a giant scoreboard and a live camera that cuts to a wide angle the moment you middle one.
+- 🧍 **Hand-drawn articulated cricketers (v2.0)**: Every player is rendered limb-by-limb in your team's colours — helmet with grille and neck guard, batting gloves, strapped pads, spiked shoes, willow bat with grain, sticker and taped grip. Running, swinging, bowling, diving and celebrating are all animated.
+- 🔴 **Real leather ball (v2.0)**: Radial-lit cherry with a stitched seam, spin, specular highlight, motion trail and a soft ground shadow that spreads with altitude.
+- ⌨️ **Fully rebindable keyboard controls (v2.0)**: `H` Hit, `R` Run, `D` Dive, `T` Turn plus four aiming keys — click any key cap in **Settings → Keyboard Controls**, press your key, done. Bindings persist in `localStorage`; `SPACE` always works as a safety net.
+- 🏏 **Arcade Batting Mechanics**: 60 FPS HTML5 Canvas rendering with genuine metre/second 3D ball physics — swing through the air, seam deviation off the deck, bounce, and multi-zone timing meters (*Perfect, Great, Good, Poor, Miss*).
+- ⚙️ **Physics-driven outcomes**: No scripted results. Your bat speed, elevation and aim launch a real trajectory — the boundary rope, a fielder's catching radius, a fumble or a run-out decide what actually happens.
 - 🏃 **Arcade Racing Mechanic**: When a shot is fielded, the game seamlessly transitions into an intense sprint race between the batsman and the fielder's laser throw (*Mash Space / Tap Run*, dive at the crease, or turn for a risky second run!).
 - 🌍 **12 International Teams**: Pakistan, India, Australia, England, South Africa, New Zealand, Sri Lanka, West Indies, Bangladesh, Afghanistan, Ireland, and Zimbabwe with custom vector SVG flags and attributes.
 - 🏆 **7 Authentic Tournament Modes**:
@@ -43,7 +48,7 @@ SEMI FINAL ➔ THE GRAND FINAL ➔ CHAMPIONS! ➔ LIFT TROPHY ➔ SAVE TO CAREER
 - ⚡ **3 Match Formats**: T20 International, One Day International (ODI), and Test Match.
 - 💾 **Persistent Career & Trophy Cabinet**: Browser `localStorage` tracking of Career XP, Player Levels (from *Gully Cricketer* to *Cricket Legend*), Batting Statistics, and unlocked custom vector trophies.
 - 🔊 **Procedural Web Audio Engine**: Zero external audio dependencies — pure synthesized wood impacts, crowd cheers, umpire whistles, and victory fanfares.
-- 📱 **100% Responsive Design**: Full touch-friendly controls for mobile and tablet devices + desktop keyboard shortcuts (`SPACEBAR`, Arrow Keys).
+- 📱 **100% Responsive Design**: Full touch-friendly controls for mobile and tablet devices + rebindable desktop keyboard shortcuts. The broadcast HUD re-flows automatically on small screens.
 
 ---
 
@@ -68,13 +73,21 @@ SEMI FINAL ➔ THE GRAND FINAL ➔ CHAMPIONS! ➔ LIFT TROPHY ➔ SAVE TO CAREER
 
 ## 🎯 Controls & Gameplay Guide
 
-### Desktop Keyboard Controls
-- **SPACEBAR**: Time & Hit the shot / Sprint during the racing sequence.
-- **UP ARROW / W**: Lofted Aerial Shot (Maximum Six attempt).
-- **LEFT ARROW / A**: Off-Side Cover Drive.
-- **RIGHT ARROW / D**: Leg-Side Pull / Hook Shot.
-- **DOWN ARROW / S**: Defensive Block / Crease Dive during running.
-- **T**: Turn for a 2nd Run.
+### Desktop Keyboard Controls (all rebindable)
+
+| Action | Default Key | What it does |
+| :--- | :---: | :--- |
+| Play Shot / Hit Ball | `H` | Swing the bat — accuracy is judged against the real ball position |
+| Sprint Between Wickets | `R` | Tap repeatedly to accelerate the runner |
+| Dive For The Crease | `D` | Full-length dive to beat the throw |
+| Turn For Extra Run | `T` | Gamble on a second or third run |
+| Aim Off Side | `→` | Cover drive to the off side (screen right) |
+| Aim Leg Side | `←` | Pull / flick through midwicket (screen left) |
+| Loft It | `↑` | Go aerial — the six shot |
+| Defend / Block | `↓` | Dead bat, survive the good delivery |
+| **Hit / Run (always on)** | `SPACE` | Non-rebindable safety key |
+
+> Change any key in **Settings → Keyboard Controls**: click the key cap, press the key you want, and it saves instantly. Duplicate keys are swapped automatically, and **Restore Default Keys** puts everything back.
 
 ### Mobile & Tablet Touch Controls
 - **HIT SHOT Button**: Large primary touch button for timing shots.
@@ -100,7 +113,8 @@ cricket-rush/
 │   ├── teams.js            # 12 international teams, vector flags & rosters
 │   ├── tournaments.js      # Tournament fixtures, AI simulation, points table & brackets
 │   ├── storage.js          # Browser localStorage persistence for Career & Trophies
-│   ├── gameplay.js         # Canvas 60FPS match engine, ball physics & racing sequence
+│   ├── controls.js         # Rebindable keyboard bindings (load/save/swap/reset)
+│   ├── gameplay.js         # Broadcast 3D match engine: camera, physics, players, fielding
 │   ├── ui.js               # Screen router, HUD overlays, scoreboard & modals
 │   └── game.js             # Master controller & event bootstrap
 │
@@ -114,7 +128,7 @@ cricket-rush/
 ### Run Locally
 1. Clone or download this repository:
    ```bash
-   git clone https://github.com/jawadakhter/cricket-rush.git
+   git clone https://github.com/jd577/cricket-rush.git
    cd cricket-rush
    ```
 2. Open `index.html` directly in any modern web browser. No web server or Node.js required!

@@ -5,7 +5,7 @@
  */
 
 window.CRICKET_CONFIG = {
-  version: "1.0.0",
+  version: "2.0.0",
   gameTitle: "CRICKET RUSH",
   gameSubtitle: "International Cricket Challenge",
   

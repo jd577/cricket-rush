@@ -27,6 +27,12 @@ class UIManager {
   showScreen(screenId) {
     if (window.cricketSound) window.cricketSound.playClick();
 
+    // leaving the arena — shut the match engine down so it never runs in the background
+    if (this.currentScreen === "screen-gameplay" && screenId !== "screen-gameplay" && this.gameplayInstance) {
+      this.gameplayInstance.destroy();
+      this.gameplayInstance = null;
+    }
+
     // Hide all screens
     document.querySelectorAll(".game-screen").forEach(el => {
       el.classList.remove("active");
@@ -49,6 +55,7 @@ class UIManager {
       if (screenId === "screen-career-stats") this.renderCareerStats();
       if (screenId === "screen-settings") this.renderSettings();
       if (screenId === "screen-how-to-play") this.renderHowToPlay();
+      this.refreshKeyLabels();
     }
   }
 
@@ -83,6 +90,85 @@ class UIManager {
     if (soundToggle) {
       soundToggle.innerHTML = settings.soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF";
       soundToggle.className = settings.soundEnabled ? "sound-badge sound-on" : "sound-badge sound-off";
+    }
+  }
+
+  /**
+   * Paint every [data-keylabel] chip in the DOM with the player's current binding
+   */
+  refreshKeyLabels() {
+    const CM = window.ControlsManager;
+    if (!CM) return;
+    document.querySelectorAll("[data-keylabel]").forEach(el => {
+      const action = el.getAttribute("data-keylabel");
+      el.textContent = CM.labelFor(action);
+    });
+    const summary = document.getElementById("gameplay-key-summary");
+    if (summary) summary.textContent = CM.summaryText();
+  }
+
+  /**
+   * Settings -> Keyboard Controls rebinding grid
+   */
+  renderControlBindings() {
+    const CM = window.ControlsManager;
+    const grid = document.getElementById("controls-binding-grid");
+    if (!grid || !CM) return;
+
+    grid.innerHTML = CM.actions.map(a => `
+      <div class="control-bind-row" data-action="${a.id}">
+        <div class="control-bind-info">
+          <span class="control-bind-icon">${a.icon}</span>
+          <div>
+            <h5>${a.label}</h5>
+            <p>${a.hint}</p>
+          </div>
+        </div>
+        <button class="key-cap" data-bind-action="${a.id}">${CM.labelFor(a.id)}</button>
+      </div>
+    `).join("");
+
+    // listening state
+    grid.querySelectorAll("[data-bind-action]").forEach(btn => {
+      btn.onclick = () => {
+        if (this.listeningForKey) return;
+        const actionId = btn.getAttribute("data-bind-action");
+        this.listeningForKey = actionId;
+        btn.classList.add("listening");
+        btn.textContent = "PRESS A KEY…";
+
+        const finish = (label, ok) => {
+          btn.classList.remove("listening");
+          btn.textContent = label;
+          if (ok) btn.classList.add("just-bound");
+          setTimeout(() => btn.classList.remove("just-bound"), 700);
+          this.listeningForKey = null;
+          window.removeEventListener("keydown", handler, true);
+          this.renderControlBindings();
+          this.refreshKeyLabels();
+        };
+
+        const handler = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (e.code === "Escape") { finish(CM.labelFor(actionId), false); return; }
+          if (CM.isReservedKey(e.code)) return;
+          CM.rebind(actionId, e.code);
+          if (window.cricketSound) window.cricketSound.playClick();
+          finish(CM.labelFor(actionId), true);
+        };
+        window.addEventListener("keydown", handler, true);
+      };
+    });
+
+    const resetBtn = document.getElementById("btn-reset-controls");
+    if (resetBtn) {
+      resetBtn.onclick = () => {
+        CM.reset();
+        this.renderControlBindings();
+        this.refreshKeyLabels();
+        if (window.cricketSound) window.cricketSound.playClick();
+      };
     }
   }
 
@@ -566,6 +652,7 @@ class UIManager {
     });
 
     this.bindGameplayHUDControls();
+    this.refreshKeyLabels();
     this.startScoreboardHUDUpdater();
   }
 
@@ -590,14 +677,23 @@ class UIManager {
         if (this.gameplayInstance) this.gameplayInstance.triggerDive();
       };
     }
+    const turnBtn = document.getElementById("hud-btn-turn");
+    if (turnBtn) {
+      turnBtn.onclick = () => {
+        if (this.gameplayInstance) this.gameplayInstance.turnForSecondRun();
+      };
+    }
 
     // Directional Shot Buttons
     document.querySelectorAll("[data-shot-dir]").forEach(btn => {
       btn.onclick = () => {
         const dir = btn.getAttribute("data-shot-dir");
-        if (this.gameplayInstance) {
-          this.gameplayInstance.triggerShot(dir);
-        }
+        const gp = this.gameplayInstance;
+        if (!gp) return;
+        document.querySelectorAll("[data-shot-dir]").forEach(b => b.classList.remove("aim-active"));
+        btn.classList.add("aim-active");
+        if (gp.phase === "DELIVERY" && gp.timing && gp.timing.active) gp.triggerShot(dir);
+        else gp.setAim(dir);
       };
     });
   }
@@ -1045,6 +1141,9 @@ class UIManager {
         window.StorageManager.saveSettings(settings);
       };
     }
+
+    // Keyboard control rebinding grid
+    this.renderControlBindings();
 
     // Reset Career Button
     const resetBtn = document.getElementById("btn-reset-career");

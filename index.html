@@ -238,17 +238,27 @@
         <canvas id="cricket-game-canvas"></canvas>
       </div>
 
-      <!-- Mobile & Desktop On-Screen Action Controls -->
+      <!-- On-Screen Action Controls (touch + mouse; keyboard keys are rebindable) -->
       <div class="gameplay-controls-overlay">
         <!-- Directional Pad -->
         <div class="shot-direction-pad">
-          <button class="shot-dir-btn" data-shot-dir="LOFT" title="Lofted Six Shot (Up Arrow / W)">🚀 LOFT</button>
+          <button class="shot-dir-btn" data-shot-dir="LOFT" title="Lofted shot">
+            <span>🚀 LOFT</span><small data-keylabel="AIM_LOFT">▲</small>
+          </button>
           <div class="shot-dir-row">
-            <button class="shot-dir-btn" data-shot-dir="OFF" title="Cover Drive Off Side (Left Arrow / A)">◀ OFF</button>
-            <button class="shot-dir-btn" data-shot-dir="STRAIGHT" title="Straight Drive">▲ STR</button>
-            <button class="shot-dir-btn" data-shot-dir="LEG" title="Pull Leg Side (Right Arrow / D)">LEG ▶</button>
+            <button class="shot-dir-btn" data-shot-dir="LEG" title="Leg side">
+              <span>◀ LEG</span><small data-keylabel="AIM_LEG">◀</small>
+            </button>
+            <button class="shot-dir-btn" data-shot-dir="STRAIGHT" title="Straight drive">
+              <span>▲ STR</span><small>—</small>
+            </button>
+            <button class="shot-dir-btn" data-shot-dir="OFF" title="Off side">
+              <span>OFF ▶</span><small data-keylabel="AIM_OFF">▶</small>
+            </button>
           </div>
-          <button class="shot-dir-btn" data-shot-dir="DEFENSIVE" title="Defensive Block / Nudge (Down Arrow / S)">🛡️ BLOCK</button>
+          <button class="shot-dir-btn" data-shot-dir="DEFENSIVE" title="Defensive block">
+            <span>🛡️ BLOCK</span><small data-keylabel="AIM_BLOCK">▼</small>
+          </button>
         </div>
 
         <!-- Big Primary Action Buttons -->
@@ -256,21 +266,33 @@
           <button id="hud-btn-hit" class="hud-action-btn btn-hit-mega pulse-glow">
             <span class="btn-action-icon">🏏</span>
             <span class="btn-action-text">HIT SHOT</span>
-            <small class="btn-shortcut">[SPACEBAR]</small>
+            <small class="btn-shortcut">[<span data-keylabel="HIT">H</span> / SPACE]</small>
           </button>
 
           <button id="hud-btn-run" class="hud-action-btn btn-run-mega">
             <span class="btn-action-icon">🏃</span>
             <span class="btn-action-text">RUN FAST!</span>
-            <small class="btn-shortcut">[MASH SPACE]</small>
+            <small class="btn-shortcut">[MASH <span data-keylabel="RUN">R</span>]</small>
           </button>
 
-          <button id="hud-btn-dive" class="hud-action-btn btn-dive-mini">
-            <span class="btn-action-icon">💨</span>
-            <span class="btn-action-text">DIVE</span>
-            <small class="btn-shortcut">[DOWN / S]</small>
-          </button>
+          <div class="hud-mini-btn-col">
+            <button id="hud-btn-dive" class="hud-action-btn btn-dive-mini">
+              <span class="btn-action-icon">💨</span>
+              <span class="btn-action-text">DIVE</span>
+              <small class="btn-shortcut">[<span data-keylabel="DIVE">D</span>]</small>
+            </button>
+            <button id="hud-btn-turn" class="hud-action-btn btn-turn-mini">
+              <span class="btn-action-icon">🔁</span>
+              <span class="btn-action-text">TURN</span>
+              <small class="btn-shortcut">[<span data-keylabel="TURN">T</span>]</small>
+            </button>
+          </div>
         </div>
+      </div>
+
+      <div class="gameplay-keyhint-bar">
+        <span id="gameplay-key-summary">H Hit · R Run · D Dive · T Turn · Arrows Aim</span>
+        <button class="keyhint-edit-btn" data-screen="screen-settings">⌨️ Change Keys</button>
       </div>
     </section>
 
@@ -402,6 +424,22 @@
           </label>
         </div>
 
+        <div class="setting-item setting-controls-block">
+          <div class="setting-info">
+            <h4>⌨️ Keyboard Controls</h4>
+            <p>Click any key box, then press the key you want to use. Bindings save automatically. <strong>SPACE</strong> always works as Hit / Run.</p>
+          </div>
+        </div>
+
+        <div id="controls-binding-grid" class="controls-binding-grid">
+          <!-- Injected dynamically -->
+        </div>
+
+        <div class="controls-actions-row">
+          <button id="btn-reset-controls" class="ghost-btn">↺ Restore Default Keys</button>
+          <span class="controls-hint-text">Tip: press <strong>Esc</strong> while listening to cancel.</span>
+        </div>
+
         <div class="setting-item danger-zone">
           <div class="setting-info">
             <h4>Reset Career Progress</h4>
@@ -445,24 +483,27 @@
         <div class="guide-card">
           <div class="guide-icon">🏃</div>
           <h3>2. THE RACING MECHANIC</h3>
-          <p>When the ball is fielded into the outfield, you must race between the wickets before the fielder throws down the stumps!</p>
+          <p>When the ball is fielded into the outfield you must race between the wickets before the throw shatters the stumps!</p>
           <ul class="guide-list">
-            <li><strong>MASH SPACEBAR / TAP [RUN]</strong> to accelerate your batsman sprint.</li>
-            <li><strong>PRESS [DIVE] (Down Arrow)</strong> near the crease for a desperate slide!</li>
-            <li>If the fielder fumbles, turn for a risky <strong>2nd RUN</strong>!</li>
+            <li><strong>MASH [<span data-keylabel="RUN">R</span>] or SPACE</strong> to accelerate your sprint.</li>
+            <li><strong>PRESS [<span data-keylabel="DIVE">D</span>]</strong> near the crease for a desperate full-length dive.</li>
+            <li><strong>PRESS [<span data-keylabel="TURN">T</span>]</strong> the moment you reach the crease to gamble on a second or third run.</li>
+            <li>The throw is a real physical throw — beat it home and you are safe.</li>
           </ul>
         </div>
 
         <div class="guide-card">
           <div class="guide-icon">🧭</div>
           <h3>3. SHOT SELECTION</h3>
-          <p>Steer your shots into open gaps using Arrow Keys or on-screen directional buttons:</p>
+          <p>Steer your shots into the gaps. Hold / tap an aim key before you swing:</p>
           <ul class="guide-list">
-            <li><strong>UP ARROW / LOFT:</strong> High aerial shot for a maximum SIX!</li>
-            <li><strong>LEFT ARROW / OFF:</strong> Cover Drive through off-side field.</li>
-            <li><strong>RIGHT ARROW / LEG:</strong> Pull & Hook shot through mid-wicket.</li>
-            <li><strong>DOWN ARROW / BLOCK:</strong> Defensive block to preserve your wicket.</li>
+            <li><strong>[<span data-keylabel="AIM_LOFT">▲</span>] LOFT:</strong> High aerial shot — the six ball.</li>
+            <li><strong>[<span data-keylabel="AIM_OFF">▶</span>] OFF SIDE:</strong> Cover drive through the off-side field (screen right).</li>
+            <li><strong>[<span data-keylabel="AIM_LEG">◀</span>] LEG SIDE:</strong> Pull &amp; flick through midwicket (screen left).</li>
+            <li><strong>[<span data-keylabel="AIM_BLOCK">▼</span>] BLOCK:</strong> Dead bat defence to survive the good ball.</li>
+            <li><strong>[<span data-keylabel="HIT">H</span>] or SPACE:</strong> Play the shot.</li>
           </ul>
+          <p class="guide-note">Every key can be changed in <strong>Settings → Keyboard Controls</strong>.</p>
         </div>
 
         <div class="guide-card">
@@ -496,6 +537,7 @@
   <script src="js/teams.js"></script>
   <script src="js/tournaments.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/controls.js"></script>
   <script src="js/gameplay.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/game.js"></script>
